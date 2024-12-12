@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { auth } from '../services/api';
+import { auth, api } from '../services/api';
 import { User } from '../types/api';
 import axios from 'axios';
 
@@ -33,8 +33,8 @@ export const useAuth = () => {
       setError(null);
       const response = await auth.login(email, password);
       
-      // After successful login, fetch user data
-      const userResponse = await auth.get('/auth/me', {
+      // After successful login, fetch user data using api instead of auth
+      const userResponse = await api.get('/auth/me', {
         headers: {
           Authorization: `Bearer ${response.access_token}`,
         },
