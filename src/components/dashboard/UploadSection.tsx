@@ -1,6 +1,8 @@
-import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { Upload } from 'lucide-react';
 import { usePodcasts } from '../../hooks/usePodcasts';
+import { podcasts } from '../../services/api';
+import { ProgressBar } from '../common/ProgressBar';
 
 export const UploadSection: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -8,6 +10,30 @@ export const UploadSection: React.FC = () => {
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { uploadPodcast, loading, error } = usePodcasts();
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [isUploading, setIsUploading] = useState(false);
+  const progressIntervalRef = useRef<NodeJS.Timeout>();
+
+  useEffect(() => {
+    return () => {
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+      }
+    };
+  }, []);
+
+  const simulateProgress = useCallback(() => {
+    setUploadProgress(0);
+    progressIntervalRef.current = setInterval(() => {
+      setUploadProgress((prev) => {
+        if (prev >= 90) {
+          clearInterval(progressIntervalRef.current);
+          return 90;
+        }
+        return prev + 1;
+      });
+    }, 2000);
+  }, []);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -55,15 +81,27 @@ export const UploadSection: React.FC = () => {
       return;
     }
 
+    setIsUploading(true);
+    simulateProgress();
+    
     try {
       await uploadPodcast(title, selectedFile);
-      setTitle('');
-      setSelectedFile(null);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
+      setUploadProgress(100);
+      setTimeout(() => {
+        setIsUploading(false);
+        setUploadProgress(0);
+        setTitle('');
+        setSelectedFile(null);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
+      }, 500);
     } catch (err) {
-      // Error is handled by the podcasts hook
+      // Handle error
+    } finally {
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+      }
     }
   };
 
@@ -141,6 +179,15 @@ export const UploadSection: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {isUploading && (
+        <div className="mt-4">
+          <ProgressBar progress={uploadProgress} />
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+            Uploading... {uploadProgress}%
+          </p>
+        </div>
+      )}
     </form>
   );
 };

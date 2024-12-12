@@ -22,15 +22,19 @@ export const usePodcasts = () => {
     }
   }, []);
 
-  const uploadPodcast = useCallback(async (title: string, file: File) => {
+  const uploadPodcast = useCallback(async (
+    title: string, 
+    file: File,
+    onProgress?: (progress: number) => void
+  ) => {
+    setLoading(true);
+    setError(null);
     try {
-      setLoading(true);
-      setError(null);
-      const newPodcast = await podcasts.upload(title, file);
-      setPodcastList(prev => [...prev, newPodcast]);
+      const newPodcast = await podcasts.upload(title, file, onProgress);
+      setPodcastList(prev => [newPodcast, ...prev]);
       return newPodcast;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred while uploading podcast');
+      setError(err instanceof Error ? err.message : 'Failed to upload podcast');
       throw err;
     } finally {
       setLoading(false);
