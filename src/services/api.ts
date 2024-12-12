@@ -1,13 +1,10 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { User, LoginResponse, Podcast, ShareResponse, ApiError } from '../types/api';
 
-const BASE_URL = 'http://localhost:8000/api/v1';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-const api = axios.create({
+export const api = axios.create({
   baseURL: BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 });
 
 // Add auth token to requests
@@ -28,6 +25,22 @@ const handleError = (error: AxiosError<ApiError>) => {
 };
 
 export const auth = {
+  signup: async (email: string, password: string) => {
+    const response = await api.post('/auth/signup', { email, password });
+    return response.data;
+  },
+
+  login: async (email: string, password: string) => {
+    const response = await api.post('/auth/token', { username: email, password });
+    return response.data;
+  },
+
+  logout: () => {
+    localStorage.removeItem('token');
+  },
+};
+
+export const podcasts = {
   async signup(email: string, password: string): Promise<User> {
     try {
       const response = await api.post<User>('/auth/signup', { email, password });

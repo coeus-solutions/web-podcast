@@ -34,7 +34,7 @@ export const useAuth = () => {
       const response = await auth.login(email, password);
       
       // After successful login, fetch user data
-      const userResponse = await axios.get('http://localhost:8000/api/v1/auth/me', {
+      const userResponse = await auth.get('/auth/me', {
         headers: {
           Authorization: `Bearer ${response.access_token}`,
         },
