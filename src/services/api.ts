@@ -55,7 +55,7 @@ export const auth = {
 };
 
 export const podcasts = {
-  async upload(title: string, file: File): Promise<Podcast> {
+  async upload(title: string, file: File, onProgress?: (progress: number) => void): Promise<Podcast> {
     try {
       const formData = new FormData();
       formData.append('title', title);
@@ -64,6 +64,12 @@ export const podcasts = {
       const response = await api.post<Podcast>('/podcasts', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+        },
+        onUploadProgress: (progressEvent) => {
+          if (progressEvent.total && onProgress) {
+            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            onProgress(percentCompleted);
+          }
         },
       });
       return response.data;
