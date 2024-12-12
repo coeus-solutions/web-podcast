@@ -41,39 +41,6 @@ export const auth = {
 };
 
 export const podcasts = {
-  async signup(email: string, password: string): Promise<User> {
-    try {
-      const response = await api.post<User>('/auth/signup', { email, password });
-      return response.data;
-    } catch (error) {
-      return handleError(error as AxiosError<ApiError>);
-    }
-  },
-
-  async login(email: string, password: string): Promise<LoginResponse> {
-    try {
-      const formData = new FormData();
-      formData.append('username', email);
-      formData.append('password', password);
-
-      const response = await api.post<LoginResponse>('/auth/token', formData, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      });
-      localStorage.setItem('token', response.data.access_token);
-      return response.data;
-    } catch (error) {
-      return handleError(error as AxiosError<ApiError>);
-    }
-  },
-
-  logout() {
-    localStorage.removeItem('token');
-  },
-};
-
-export const podcasts = {
   async upload(title: string, file: File): Promise<Podcast> {
     try {
       const formData = new FormData();
