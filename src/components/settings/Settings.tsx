@@ -61,7 +61,7 @@ export const Settings: React.FC = () => {
 
   // Update the button in the return statement to show loading state
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-2xl mx-auto my-8">
       <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Profile Settings */}

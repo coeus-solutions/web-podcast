@@ -30,7 +30,7 @@ export const AppLayout: React.FC = () => {
   const showFooter = isLandingPage && !user;
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-white">
       <Navbar />
       {console.log(user)}
       {user && <Sidebar />}

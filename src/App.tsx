@@ -10,7 +10,7 @@ const App: React.FC = () => {
     <ThemeProvider>
       <Router>
         <AuthProvider>
-          <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+          <div className="min-h-screen dark:bg-gray-900">
             <AppRoutes />
           </div>
         </AuthProvider>
