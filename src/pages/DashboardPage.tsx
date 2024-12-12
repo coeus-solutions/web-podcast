@@ -35,7 +35,6 @@ const LoadingUploadSection = () => (
 
 const LoadingPodcastList = () => (
   <div className="mt-8">
-    <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-32 mb-4"></div>
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
       {[...Array(3)].map((_, index) => (
         <div key={index} className="p-4 border-b border-gray-200 dark:border-gray-700 last:border-0 animate-pulse">
@@ -57,22 +56,9 @@ const LoadingPodcastList = () => (
 );
 
 export const DashboardPage: React.FC = () => {
-  const { loading } = usePodcasts();
-
-  if (loading) {
-    return (
-      <div className="bg-gray-50 dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <LoadingStats />
-          <LoadingUploadSection />
-          <LoadingPodcastList />
-        </div>
-      </div>
-    );
-  }
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900">
+    <div className="bg-white dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <DashboardStats />
         <UploadSection />
