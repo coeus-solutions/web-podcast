@@ -1,5 +1,6 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { User, LoginResponse, Podcast, ShareResponse, ApiError } from '../types/api';
+import { toast } from '../components/common/Toast';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -10,14 +11,39 @@ export const api = axios.create({
   }
 });
 
-// Add auth token to requests
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+// Add request interceptor to attach token
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error: AxiosError) => {
+    return Promise.reject(error);
   }
-  return config;
-});
+);
+
+// Add response interceptor to handle 401 errors
+api.interceptors.response.use(
+  (response) => response,
+  (error: AxiosError) => {
+    if (error.response?.status === 401) {
+      // Clear local storage
+      localStorage.clear();
+      
+      // Show toast message
+      toast.error('Your session has expired. Please login again.');
+      
+      // Redirect to login after a short delay to ensure toast is visible
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 1500);
+    }
+    return Promise.reject(error);
+  }
+);
 
 // Handle API errors
 const handleError = (error: AxiosError<ApiError>) => {

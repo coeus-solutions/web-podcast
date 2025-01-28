@@ -38,14 +38,14 @@ export const UploadSection: React.FC = () => {
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
-    if (file && (file.type === 'audio/mpeg' || file.type === 'audio/mp3')) {
+    if (file && file.type.startsWith('video/')) {
       if (file.size <= 100 * 1024 * 1024) { // 100MB
         setSelectedFile(file);
       } else {
         alert('File size exceeds 100MB limit');
       }
     } else {
-      alert('Please upload an MP3 file');
+      alert('Please upload a video file');
     }
     setIsDragging(false);
   }, []);
@@ -62,14 +62,14 @@ export const UploadSection: React.FC = () => {
   const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.type === 'audio/mpeg' || file.type === 'audio/mp3') {
+      if (file.type.startsWith('video/')) {
         if (file.size <= 100 * 1024 * 1024) { // 100MB
           setSelectedFile(file);
         } else {
           alert('File size exceeds 100MB limit');
         }
       } else {
-        alert('Please upload an MP3 file');
+        alert('Please upload a video file');
       }
     }
   }, []);
@@ -144,7 +144,7 @@ export const UploadSection: React.FC = () => {
                 </span>
               ) : (
                 <span className="mt-2 block text-sm font-medium text-gray-900 dark:text-gray-300">
-                  Drop your podcast file here, or
+                  Drop your video file here, or
                   <span className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-500"> browse</span>
                 </span>
               )}
@@ -154,13 +154,13 @@ export const UploadSection: React.FC = () => {
                 type="file"
                 ref={fileInputRef}
                 className="sr-only"
-                accept="audio/mpeg,audio/mp3"
+                accept="video/*"
                 onChange={handleFileSelect}
                 required
               />
             </label>
             <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-              MP3 up to 100MB
+              Video files up to 100MB
             </p>
           </div>
         </div>

@@ -1,22 +1,23 @@
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import AppRoutes from './components/AppRoutes';
-import './index.css';
+import { ToastContainer } from './components/common/Toast';
 
-const App: React.FC = () => {
+function App() {
   return (
-    <ThemeProvider>
-      <Router>
+    <BrowserRouter>
+      <ThemeProvider>
         <AuthProvider>
           <div className="min-h-screen dark:bg-gray-900">
             <AppRoutes />
+            <ToastContainer />
           </div>
         </AuthProvider>
-      </Router>
-    </ThemeProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   );
-};
+}
 
 export default App;

@@ -26,7 +26,7 @@ export const PodcastList: React.FC = () => {
   const [expandedPodcastId, setExpandedPodcastId] = useState<number | null>(null);
   const [playingKeyPoint, setPlayingKeyPoint] = useState<number | null>(null);
   const [podcastToDelete, setPodcastToDelete] = useState<number | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     fetchPodcasts();
@@ -38,24 +38,17 @@ export const PodcastList: React.FC = () => {
 
   const handlePlayKeyPoint = (keyPoint: KeyPoint) => {
     if (playingKeyPoint === keyPoint.id) {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
+      if (videoRef.current) {
+        videoRef.current.pause();
+        videoRef.current.currentTime = 0;
       }
       setPlayingKeyPoint(null);
     } else {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
+      if (videoRef.current) {
+        videoRef.current.pause();
+        videoRef.current.currentTime = 0;
       }
-      const audio = new Audio(keyPoint.file_path);
-      audioRef.current = audio;
-      audio.play();
       setPlayingKeyPoint(keyPoint.id);
-      
-      audio.onended = () => {
-        setPlayingKeyPoint(null);
-      };
     }
   };
 
@@ -77,10 +70,12 @@ export const PodcastList: React.FC = () => {
         if (expandedPodcastId === podcastToDelete) {
           setExpandedPodcastId(null);
         }
-        if (audioRef.current) {
-          audioRef.current.pause();
+        if (videoRef.current) {
+          videoRef.current.pause();
           setPlayingKeyPoint(null);
         }
+        const updatedPodcasts = podcasts.filter(podcast => podcast.id !== podcastToDelete);
+        podcasts.splice(0, podcasts.length, ...updatedPodcasts);
       } catch (error) {
         console.error('Error deleting podcast:', error);
       }
@@ -125,7 +120,7 @@ export const PodcastList: React.FC = () => {
             No podcasts uploaded yet
           </div>
           <Link
-            to="/dashboard"
+            to="/app/dashboard"
             className="px-6 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105"
           >
             Upload Your First Podcast
@@ -192,7 +187,15 @@ export const PodcastList: React.FC = () => {
             </div>
             {expandedPodcastId === podcast.id && podcast.key_points.length > 0 && (
               <div className="border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
-                <div className="p-6 space-y-4">
+                <div className="p-6">
+                  <video
+                    ref={videoRef}
+                    src={podcast.file_path}
+                    className="w-full rounded-lg mb-4"
+                    controls
+                  />
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Key Points</h3>
+                  <div className="space-y-4">
                   {podcast.key_points.map((keyPoint) => (
                     <div 
                       key={keyPoint.id}
@@ -226,6 +229,13 @@ export const PodcastList: React.FC = () => {
                           </button>
                         </div>
                       </div>
+                      <div className="mt-4">
+                        <video
+                          src={keyPoint.file_path}
+                          className="w-full rounded-lg"
+                          controls
+                        />
+                      </div>
                       <div className="mt-2 flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400">
                         <span className="inline-flex items-center px-2 py-1 rounded-md bg-gray-100 dark:bg-gray-700">
                           {Math.floor(keyPoint.start_time / 60)}:
@@ -239,6 +249,7 @@ export const PodcastList: React.FC = () => {
                       </div>
                     </div>
                   ))}
+                  </div>
                 </div>
               </div>
             )}

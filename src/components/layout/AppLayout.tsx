@@ -32,7 +32,6 @@ export const AppLayout: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
-      {console.log(user)}
       {user && <Sidebar />}
       <div className={user ? 'lg:pl-64' : ''}>
         <main className="flex-1">
