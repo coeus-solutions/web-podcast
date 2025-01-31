@@ -1,12 +1,53 @@
 import React, { useState } from 'react';
-import { FeaturesList } from './FeaturesList';
-import { UserGroupIcon, VideoCameraIcon, ClockIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import { motion } from 'framer-motion';
+import { 
+  SparklesIcon, CursorArrowRaysIcon, ShieldCheckIcon, CloudArrowUpIcon,
+  UserPlusIcon, ArrowUpTrayIcon, CpuChipIcon, ChevronLeftIcon, ChevronRightIcon
+} from '@heroicons/react/24/outline';
 
-const stats = [
-  { name: 'Active Users', value: '10,000+', icon: UserGroupIcon },
-  { name: 'Videos Processed', value: '1M+', icon: VideoCameraIcon },
-  { name: 'Hours Saved', value: '500,000+', icon: ClockIcon },
+// Import images
+import signupImage from '../../assets/images/signup.svg';
+import uploadImage from '../../assets/images/upload.svg';
+import processingImage from '../../assets/images/processing.svg';
+
+const features = [
+  {
+    title: "Smart Video Analysis",
+    description: "Our AI analyzes every frame to identify key moments, emotions, and actions.",
+    icon: SparklesIcon,
+  },
+  {
+    title: "Instant Highlights",
+    description: "Automatically generate highlight clips with perfect timing and transitions.",
+    icon: CursorArrowRaysIcon,
+  },
+  {
+    title: "Secure Processing",
+    description: "Enterprise-grade encryption and isolated processing environments.",
+    icon: ShieldCheckIcon,
+  },
+  {
+    title: "Cloud Storage",
+    description: "Safely store and organize all your video content in the cloud.",
+    icon: CloudArrowUpIcon,
+  },
 ];
+
+const FeatureCard: React.FC<{ icon: React.ElementType; title: string; description: string }> = ({ icon: Icon, title, description }) => (
+  <motion.div
+    whileHover={{ scale: 1.02 }}
+    className="relative backdrop-blur-xl bg-white/5 rounded-2xl p-6 border border-emerald-500/10"
+  >
+    <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-cyan-500/5 rounded-2xl" />
+    <div className="relative">
+      <div className="p-3 bg-emerald-500/10 rounded-xl w-fit">
+        <Icon className="h-6 w-6 text-emerald-400" />
+      </div>
+      <h3 className="mt-4 text-xl font-semibold text-white">{title}</h3>
+      <p className="mt-2 text-gray-300">{description}</p>
+    </div>
+  </motion.div>
+);
 
 const testimonials = [
   {
@@ -26,19 +67,7 @@ const testimonials = [
     role: 'Sports Analyst',
     image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     quote: 'Analyzing game footage has never been easier. The automatic highlight detection helps us identify key plays instantly.',
-  },
-  {
-    name: 'David Kim',
-    role: 'Marketing Director',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    quote: 'We use Vid Highlights for our marketing campaigns. The ability to quickly extract engaging moments has improved our social media presence dramatically.',
-  },
-  {
-    name: 'Lisa Thompson',
-    role: 'Event Organizer',
-    image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    quote: 'For event highlights and recap videos, this tool is invaluable. It captures the best moments automatically, saving us countless hours of manual editing.',
-  },
+  }
 ];
 
 const faqs = [
@@ -55,58 +84,78 @@ const faqs = [
     answer: 'Processing time depends on the video length and quality. Typically, a 10-minute video is processed in 2-3 minutes. Real-time progress tracking is available during processing.',
   },
   {
-    question: 'Can I customize the highlight detection criteria?',
-    answer: 'Yes! You can set custom parameters for what constitutes a highlight, including minimum clip duration, action intensity threshold, and specific markers to look for.',
-  },
-  {
     question: 'Is my content secure?',
     answer: 'Absolutely. We use enterprise-grade encryption for all uploaded content, and your videos are processed in isolated environments. We never share or use your content for training our AI.',
-  },
-  {
-    question: 'Do you offer a free trial?',
-    answer: 'Yes, we offer a 14-day free trial on our Starter and Professional plans, with no credit card required. You can process up to 5 videos during the trial period.',
-  },
+  }
 ];
 
-const pricing = [
+const StepCard: React.FC<{ 
+  title: string; 
+  description: string; 
+  icon: React.ElementType;
+  imageSrc: string;
+  index: number;
+}> = ({ title, description, icon: Icon, imageSrc, index }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: index * 0.2 }}
+      className="relative backdrop-blur-xl bg-white/5 rounded-2xl p-8 border border-emerald-500/10"
+    >
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-cyan-500/5 rounded-2xl" />
+      <div className="relative">
+        <div className="flex items-center mb-6">
+          <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center">
+            <Icon className="h-6 w-6 text-emerald-400" />
+          </div>
+          <div className="ml-4">
+            <span className="text-emerald-400 font-medium">Step {index + 1}</span>
+            <h3 className="text-xl font-semibold text-white">{title}</h3>
+          </div>
+        </div>
+        <div className="aspect-video mb-6 bg-gray-900/50 rounded-xl overflow-hidden">
+          <motion.div
+            className="w-full h-full"
+            initial={{ scale: 1 }}
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+          >
+            <motion.img
+              src={imageSrc}
+              alt={title}
+              className="w-full h-full object-cover"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.2 }}
+            />
+          </motion.div>
+        </div>
+        <p className="text-gray-300">{description}</p>
+      </div>
+    </motion.div>
+  );
+};
+
+const steps = [
   {
-    name: 'Starter',
-    price: '$9',
-    features: [
-      '50 videos per month',
-      'Basic analytics',
-      '720p video quality',
-      'Email support',
-      '5GB storage',
-    ],
-    cta: 'Start Free Trial',
+    title: "Create an Account",
+    description: "Sign up in seconds and get instant access to our AI-powered video analysis tools.",
+    icon: UserPlusIcon,
+    imageSrc: signupImage,
   },
   {
-    name: 'Professional',
-    price: '$29',
-    popular: true,
-    features: [
-      'Unlimited videos',
-      'Advanced analytics',
-      '4K video quality',
-      'Priority support',
-      '100GB storage',
-      'Custom branding',
-    ],
-    cta: 'Get Started',
+    title: "Upload Your Video",
+    description: "Select and upload any video from your computer. We support all major video formats up to 4K resolution.",
+    icon: ArrowUpTrayIcon,
+    imageSrc: uploadImage,
   },
   {
-    name: 'Enterprise',
-    price: 'Custom',
-    features: [
-      'Unlimited everything',
-      'Custom AI models',
-      'Dedicated support',
-      'Custom integrations',
-      'Unlimited storage',
-      'SLA guarantee',
-    ],
-    cta: 'Contact Sales',
+    title: "Let AI Work Its Magic",
+    description: "Our advanced AI analyzes your video, identifying key moments and generating highlights automatically.",
+    icon: CpuChipIcon,
+    imageSrc: processingImage,
   },
 ];
 
@@ -123,195 +172,231 @@ export const FeaturesSection: React.FC = () => {
   };
 
   return (
-    <div className="relative py-16 sm:py-24">
-      {/* Gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-sky-900/50 to-indigo-900/50">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(56,189,248,0.2),transparent),radial-gradient(circle_at_70%_60%,rgba(99,102,241,0.2),transparent)]"></div>
-        {/* Futuristic grid overlay */}
-        <div className="absolute inset-0" style={{
-          backgroundImage: `linear-gradient(transparent 1px, rgba(56, 189, 248, 0.1) 1px), 
-                           linear-gradient(90deg, transparent 1px, rgba(56, 189, 248, 0.1) 1px)`,
-          backgroundSize: '50px 50px',
-          transform: 'perspective(500px) rotateX(60deg)',
-          opacity: '0.1'
-        }}></div>
+    <div className="relative py-24 bg-[#0A0F1E]">
+      {/* Background effects */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0A0F1E] via-[#162137] to-[#1C3851]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(16,185,129,0.15),transparent),radial-gradient(circle_at_70%_60%,rgba(6,182,212,0.15),transparent)]" />
       </div>
 
-      {/* Glowing orbs decoration */}
-      <div className="absolute top-1/4 left-10 w-72 h-72 bg-sky-400/20 rounded-full mix-blend-screen filter blur-xl opacity-50 animate-pulse"></div>
-      <div className="absolute bottom-1/4 right-10 w-72 h-72 bg-indigo-400/20 rounded-full mix-blend-screen filter blur-xl opacity-50 animate-pulse" style={{ animationDelay: '1s' }}></div>
+      {/* Glowing orbs */}
+      <motion.div
+        animate={{
+          scale: [1, 1.2, 1],
+          opacity: [0.3, 0.5, 0.3],
+          filter: ['blur(40px)', 'blur(60px)', 'blur(40px)']
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          repeatType: "reverse",
+        }}
+        className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-gradient-to-r from-emerald-500/30 via-teal-500/30 to-cyan-500/30 rounded-full mix-blend-screen"
+      />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Main Features Section */}
-        <div className="lg:text-center mb-20">
-          <h2 className="text-lg text-white font-semibold tracking-wide uppercase animate-pulse">
-            Vid Highlights
-          </h2>
-          <p className="mt-2 text-5xl md:text-6xl lg:text-7xl leading-tight font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-sky-200 to-indigo-300">
-            AI-Powered Video Analysis
-          </p>
-          <p className="mt-6 max-w-3xl text-2xl text-white/90 lg:mx-auto">
-            Transform your video content with intelligent highlight detection, smart summaries, and automated clip generation.
-          </p>
-        </div>
+        {/* Features Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-20"
+        >
+          <motion.h2
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-3xl sm:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-300 via-teal-300 to-cyan-300"
+          >
+            Powerful Features
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="mt-4 text-xl text-gray-300"
+          >
+            Everything you need to transform your videos into engaging content
+          </motion.p>
+        </motion.div>
 
-        {/* Features Cards */}
-        <div className="mt-10 relative backdrop-blur-lg bg-white/10 rounded-2xl p-8 shadow-2xl border border-sky-200/20">
-          <FeaturesList />
-        </div>
+        {/* Feature Cards */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24"
+        >
+          {features.map((feature, index) => (
+            <FeatureCard
+              key={feature.title}
+              icon={feature.icon}
+              title={feature.title}
+              description={feature.description}
+            />
+          ))}
+        </motion.div>
 
-        {/* Stats Section */}
-        <div className="mt-24">
-          <dl className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-            {stats.map((stat) => (
-              <div key={stat.name} className="backdrop-blur-lg bg-white/10 rounded-2xl p-8 border border-sky-200/20">
-                <dt className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <stat.icon className="h-8 w-8 text-white" />
-                  </div>
-                  <p className="ml-3 text-xl font-medium text-white">{stat.name}</p>
-                </dt>
-                <dd className="mt-3 text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-sky-200">
-                  {stat.value}
-                </dd>
-              </div>
+        {/* How It Works Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="mb-24"
+        >
+          <div className="text-center mb-16">
+            <motion.h2
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-3xl sm:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-300 via-teal-300 to-cyan-300"
+            >
+              How It Works
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="mt-4 text-xl text-gray-300"
+            >
+              Get started with Vid Highlights in three simple steps
+            </motion.p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {steps.map((step, index) => (
+              <StepCard
+                key={step.title}
+                title={step.title}
+                description={step.description}
+                icon={step.icon}
+                imageSrc={step.imageSrc}
+                index={index}
+              />
             ))}
-          </dl>
-        </div>
+          </div>
+        </motion.div>
 
         {/* Testimonials Section */}
-        <div className="mt-24">
-          <h3 className="text-4xl md:text-5xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-white via-sky-200 to-indigo-300 mb-16">
-            Success Stories
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="mb-24"
+        >
+          <h3 className="text-3xl sm:text-4xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-emerald-300 via-teal-300 to-cyan-300 mb-12">
+            What Our Users Say
           </h3>
           <div className="relative">
-            <div className="overflow-hidden">
-              <div className="relative backdrop-blur-lg bg-white/10 rounded-2xl p-8 border border-sky-200/20">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="relative backdrop-blur-xl bg-white/5 rounded-2xl p-8 border border-emerald-500/10"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-cyan-500/5 rounded-2xl" />
+              <div className="relative">
                 <div className="flex items-center">
                   <img 
-                    className="h-20 w-20 rounded-full ring-2 ring-white/50" 
+                    className="h-16 w-16 rounded-full ring-2 ring-emerald-500/20" 
                     src={testimonials[currentTestimonialIndex].image} 
                     alt={testimonials[currentTestimonialIndex].name} 
                   />
                   <div className="ml-6">
-                    <p className="text-2xl font-medium text-white">{testimonials[currentTestimonialIndex].name}</p>
-                    <p className="text-lg text-sky-200">{testimonials[currentTestimonialIndex].role}</p>
+                    <p className="text-xl font-medium text-white">{testimonials[currentTestimonialIndex].name}</p>
+                    <p className="text-emerald-400">{testimonials[currentTestimonialIndex].role}</p>
                   </div>
                 </div>
-                <p className="mt-8 text-xl text-white/90 italic leading-relaxed">"{testimonials[currentTestimonialIndex].quote}"</p>
+                <p className="mt-6 text-lg text-gray-300 italic">"{testimonials[currentTestimonialIndex].quote}"</p>
                 
-                {/* Navigation Buttons */}
-                <div className="absolute top-1/2 -translate-y-1/2 left-4">
-                  <button 
+                {/* Navigation */}
+                <div className="flex justify-between items-center mt-8">
+                  <motion.button 
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={prevTestimonial}
-                    className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300 text-sky-300 hover:text-sky-200"
+                    className="p-2 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400"
                   >
                     <ChevronLeftIcon className="h-6 w-6" />
-                  </button>
-                </div>
-                <div className="absolute top-1/2 -translate-y-1/2 right-4">
-                  <button 
+                  </motion.button>
+                  
+                  <div className="flex space-x-2">
+                    {testimonials.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentTestimonialIndex(index)}
+                        className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                          index === currentTestimonialIndex 
+                            ? 'bg-emerald-400 w-6' 
+                            : 'bg-emerald-400/30 hover:bg-emerald-400/50'
+                        }`}
+                      />
+                    ))}
+                  </div>
+
+                  <motion.button 
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={nextTestimonial}
-                    className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300 text-sky-300 hover:text-sky-200"
+                    className="p-2 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400"
                   >
                     <ChevronRightIcon className="h-6 w-6" />
-                  </button>
-                </div>
-
-                {/* Dots Indicator */}
-                <div className="flex justify-center mt-6 space-x-2">
-                  {testimonials.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentTestimonialIndex(index)}
-                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                        index === currentTestimonialIndex 
-                          ? 'bg-sky-300 w-4' 
-                          : 'bg-sky-300/30 hover:bg-sky-300/50'
-                      }`}
-                    />
-                  ))}
+                  </motion.button>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
 
         {/* FAQ Section */}
-        <div className="mt-24">
-          <h3 className="text-4xl md:text-5xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-white via-sky-200 to-indigo-300 mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
+          <h3 className="text-3xl sm:text-4xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-emerald-300 via-teal-300 to-cyan-300 mb-12">
             Frequently Asked Questions
           </h3>
           <div className="space-y-4">
             {faqs.map((faq, index) => (
-              <div 
+              <motion.div 
                 key={index}
-                className="backdrop-blur-lg bg-white/10 rounded-xl border border-sky-200/20 overflow-hidden"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="relative backdrop-blur-xl bg-white/5 rounded-xl border border-emerald-500/10 overflow-hidden"
               >
                 <button
                   onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
-                  className="w-full px-8 py-6 text-left flex justify-between items-center"
+                  className="w-full px-6 py-4 text-left"
                 >
-                  <span className="text-xl font-medium text-white">{faq.question}</span>
-                  <ChevronRightIcon 
-                    className={`h-6 w-6 text-white transition-transform duration-300 ${
-                      expandedFaq === index ? 'transform rotate-90' : ''
-                    }`}
-                  />
-                </button>
-                {expandedFaq === index && (
-                  <div className="px-8 pb-6 text-lg text-white/90">
-                    {faq.answer}
+                  <div className="flex justify-between items-center">
+                    <h4 className="text-lg font-medium text-white">{faq.question}</h4>
+                    <ChevronRightIcon 
+                      className={`h-5 w-5 text-emerald-400 transition-transform duration-300 ${
+                        expandedFaq === index ? 'transform rotate-90' : ''
+                      }`}
+                    />
                   </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Pricing Section */}
-        <div className="mt-24">
-          <h3 className="text-4xl md:text-5xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-white via-sky-200 to-indigo-300 mb-16">
-            Simple, Transparent Pricing
-          </h3>
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {pricing.map((plan) => (
-              <div key={plan.name} className={`backdrop-blur-lg rounded-2xl p-8 border ${
-                plan.popular 
-                  ? 'bg-gradient-to-b from-sky-400/20 to-indigo-400/20 border-white/40' 
-                  : 'bg-white/10 border-white/20'
-              }`}>
-                {plan.popular && (
-                  <span className="bg-gradient-to-r from-sky-400 to-indigo-400 text-white px-4 py-1.5 rounded-full text-base font-medium absolute -top-3 right-6">
-                    Most Popular
-                  </span>
-                )}
-                <h4 className="text-2xl font-semibold text-white">{plan.name}</h4>
-                <p className="mt-4 text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-sky-200">
-                  {plan.price}
-                  {plan.price !== 'Custom' && <span className="text-xl font-normal text-white/80">/month</span>}
-                </p>
-                <ul className="mt-8 space-y-4">
-                  {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-center text-lg text-white/90">
-                      <svg className="h-6 w-6 text-white mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                <button className={`mt-8 w-full py-4 px-6 rounded-md text-lg font-medium transition-all duration-300 ${
-                  plan.popular
-                    ? 'bg-gradient-to-r from-sky-400 to-indigo-400 hover:from-sky-500 hover:to-indigo-500 text-white'
-                    : 'bg-white/10 hover:bg-white/20 text-white'
-                }`}>
-                  {plan.cta}
+                  {expandedFaq === index && (
+                    <p className="mt-4 text-gray-300">{faq.answer}</p>
+                  )}
                 </button>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
