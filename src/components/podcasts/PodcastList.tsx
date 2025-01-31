@@ -29,6 +29,7 @@ export const PodcastList: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [downloadingClips, setDownloadingClips] = useState<number[]>([]);
 
   // Filter and sort podcasts
   const filteredAndSortedPodcasts = React.useMemo(() => {
@@ -94,6 +95,27 @@ export const PodcastList: React.FC = () => {
       } catch (error) {
         console.error('Error deleting podcast:', error);
       }
+    }
+  };
+
+  const handleDownloadClip = async (e: React.MouseEvent, filePath: string, keyPointId: number) => {
+    e.stopPropagation();
+    setDownloadingClips(prev => [...prev, keyPointId]);
+    try {
+      const response = await fetch(filePath);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `clip-${keyPointId}.mp4`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error downloading clip:', error);
+    } finally {
+      setDownloadingClips(prev => prev.filter(id => id !== keyPointId));
     }
   };
 
@@ -263,7 +285,7 @@ export const PodcastList: React.FC = () => {
 
             {/* Expanded Content */}
             {expandedPodcastId === podcast.id && podcast.key_points.length > 0 && (
-              <div className="border-t border-gray-100 dark:border-gray-700 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+              <div className="border-t border-gray-100 dark:border-gray-700 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 relative z-10">
                 <div className="p-6">
                   <video
                     ref={videoRef}
@@ -278,7 +300,8 @@ export const PodcastList: React.FC = () => {
                     {podcast.key_points.map((keyPoint) => (
                       <div 
                         key={keyPoint.id}
-                        className="group/card bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md hover:shadow-lg transition-all duration-200 border border-gray-100 dark:border-gray-700 hover:border-sky-200 dark:hover:border-sky-800"
+                        className="group/card bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md hover:shadow-lg transition-all duration-200 border border-gray-100 dark:border-gray-700 hover:border-sky-200 dark:hover:border-sky-800 relative"
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <div className="flex items-center justify-between">
                           <p className="text-sm text-gray-900 dark:text-white flex-1 mr-4">{keyPoint.content}</p>
@@ -294,16 +317,15 @@ export const PodcastList: React.FC = () => {
                               <Share2 className="h-4 w-4" />
                             </button>
                             <button 
-                              className="p-2 text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 transition-colors rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/30"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handlePlayKeyPoint(keyPoint);
-                              }}
+                              className="p-2 text-sky-400 hover:text-sky-500 dark:hover:text-sky-300 transition-colors rounded-lg hover:bg-sky-50 dark:hover:bg-sky-900/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                              onClick={(e) => handleDownloadClip(e, keyPoint.file_path, keyPoint.id)}
+                              title="Download Clip"
+                              disabled={downloadingClips.includes(keyPoint.id)}
                             >
-                              {playingKeyPoint === keyPoint.id ? (
-                                <Square className="h-4 w-4" />
+                              {downloadingClips.includes(keyPoint.id) ? (
+                                <div className="h-4 w-4 border-2 border-sky-400 border-t-transparent rounded-full animate-spin" />
                               ) : (
-                                <Play className="h-4 w-4" />
+                                <Download className="h-4 w-4" />
                               )}
                             </button>
                           </div>
