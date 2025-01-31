@@ -67,6 +67,18 @@ export const useAuth = () => {
     });
   }, []);
 
+  const refreshUser = useCallback(async () => {
+    try {
+      const userData = await auth.getCurrentUser();
+      setUser(userData);
+      localStorage.setItem('user', JSON.stringify(userData));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to refresh user data';
+      setError(message);
+      throw error;
+    }
+  }, []);
+
   return {
     user,
     loading,
@@ -75,5 +87,6 @@ export const useAuth = () => {
     login,
     logout,
     updateUser,
+    refreshUser
   };
 };

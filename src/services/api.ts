@@ -81,6 +81,15 @@ export const auth = {
   logout: () => {
     localStorage.removeItem('token');
   },
+
+  getCurrentUser: async (): Promise<User> => {
+    try {
+      const response = await api.get<User>('/auth/me');
+      return response.data;
+    } catch (error) {
+      return handleError(error as AxiosError<ApiError>);
+    }
+  }
 };
 
 export const podcasts = {
@@ -141,4 +150,28 @@ export const podcasts = {
       return handleError(error as AxiosError<ApiError>);
     }
   },
+};
+
+export const payments = {
+  async createCheckoutSession(tokenAmount: number): Promise<{ checkout_url: string }> {
+    try {
+      const response = await api.post<{ checkout_url: string }>('/payments/create-checkout', {
+        token_amount: tokenAmount
+      });
+      return response.data;
+    } catch (error) {
+      return handleError(error as AxiosError<ApiError>);
+    }
+  }
+};
+
+export const tokens = {
+  async getBalance(): Promise<{ available_tokens: number }> {
+    try {
+      const response = await api.get<{ available_tokens: number }>('/tokens/balance');
+      return response.data;
+    } catch (error) {
+      return handleError(error as AxiosError<ApiError>);
+    }
+  }
 }; 

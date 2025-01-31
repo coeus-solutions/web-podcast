@@ -1,7 +1,10 @@
 export interface User {
-  email: string;
   id: number;
+  email: string;
+  name: string;
   created_at: string;
+  total_tokens: number;
+  used_tokens: number;
 }
 
 export interface LoginResponse {

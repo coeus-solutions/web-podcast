@@ -9,6 +9,7 @@ import { PodcastsPage } from '../pages/PodcastsPage';
 import { PodcastList } from './podcasts/PodcastList';
 import { Settings } from './settings/Settings';
 import { LandingPage } from '../pages/LandingPage';
+import { PaymentSuccessPage } from '../pages/PaymentSuccessPage';
 
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuthContext();
@@ -33,6 +34,7 @@ const AppRoutes: React.FC = () => {
         <Route path="settings" element={<Settings />} />
         <Route path="podcasts/:id" element={<PodcastsPage />} />
       </Route>
+      <Route path="/payment/success" element={<PrivateRoute><PaymentSuccessPage /></PrivateRoute>} />
     </Routes>
   );
 };

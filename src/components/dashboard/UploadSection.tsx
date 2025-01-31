@@ -3,6 +3,9 @@ import { Upload } from 'lucide-react';
 import { usePodcasts } from '../../hooks/usePodcasts';
 import { podcasts } from '../../services/api';
 import { ProgressBar } from '../common/ProgressBar';
+import { useAuthContext } from '../../contexts/AuthContext';
+import { toast } from '../../components/common/Toast';
+import { AxiosError } from 'axios';
 
 export const UploadSection: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -12,7 +15,8 @@ export const UploadSection: React.FC = () => {
   const { uploadPodcast, loading, error } = usePodcasts();
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isUploading, setIsUploading] = useState(false);
-  const progressIntervalRef = useRef<NodeJS.Timeout>();
+  const progressIntervalRef = useRef<ReturnType<typeof setInterval>>();
+  const { refreshUser } = useAuthContext();
 
   useEffect(() => {
     return () => {
@@ -87,6 +91,8 @@ export const UploadSection: React.FC = () => {
     try {
       await uploadPodcast(title, selectedFile);
       setUploadProgress(100);
+      toast.success('Podcast uploaded successfully!');
+      
       setTimeout(() => {
         setIsUploading(false);
         setUploadProgress(0);
@@ -97,12 +103,27 @@ export const UploadSection: React.FC = () => {
         }
       }, 500);
     } catch (err) {
-      // Handle error
+      const error = err as AxiosError;
+      if (error.response?.status === 402) {
+        toast.error("You don't have sufficient tokens");
+      } else {
+        toast.error('Failed to upload podcast. Please try again.');
+      }
     } finally {
+      // Always refresh user data to get latest token balance
+      await refreshUser().catch(console.error);
+      
       if (progressIntervalRef.current) {
         clearInterval(progressIntervalRef.current);
       }
+      setIsUploading(false);
     }
+  };
+
+  const getProgressText = (progress: number) => {
+    if (progress > 40) return 'Generating clips...';
+    if (progress > 10) return 'Extracting highlights...';
+    return 'Uploading...';
   };
 
   return (
@@ -184,7 +205,7 @@ export const UploadSection: React.FC = () => {
         <div className="mt-4">
           <ProgressBar progress={uploadProgress} />
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-            Uploading... {uploadProgress}%
+            {getProgressText(uploadProgress)} {uploadProgress}%
           </p>
         </div>
       )}
