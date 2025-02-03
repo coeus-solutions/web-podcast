@@ -16,12 +16,26 @@ export const useAuth = () => {
     try {
       setLoading(true);
       setError(null);
-      const newUser = await auth.signup(email, password, name, confirmPassword);
-      setUser(newUser);
-      return newUser;
+      
+      // Get signup response
+      const response = await auth.signup(email, password, name, confirmPassword);
+      
+      // Login immediately after signup to get the token
+      const loginResponse = await auth.login(email, password);
+      localStorage.setItem('token', loginResponse.access_token);
+      
+      // Fetch user data
+      const userResponse = await api.get('/auth/me');
+      const userData = userResponse.data;
+      
+      // Store user data
+      setUser(userData);
+      localStorage.setItem('user', JSON.stringify(userData));
+      console.log('returnung');
+      return { success: true, user: userData };
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred during signup');
-      throw err;
+      return { success: false, user: null };
     } finally {
       setLoading(false);
     }

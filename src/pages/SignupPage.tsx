@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthInput } from '../components/auth/AuthInput';
 import { AuthButton } from '../components/auth/AuthButton';
-import { useAuth } from '../hooks/useAuth';
+import { useAuthContext } from '../contexts/AuthContext';
 import { SignupFormData } from '../types/auth';
 
 export const SignupPage: React.FC = () => {
   const navigate = useNavigate();
-  const { signup, loading, error } = useAuth();
+  const { signup, loading, error } = useAuthContext();
   const [formData, setFormData] = useState<SignupFormData>({
     name: '',
     email: '',
@@ -25,9 +25,15 @@ export const SignupPage: React.FC = () => {
       return;
     }
 
-    const success = await signup(formData.email, formData.password, formData.name, formData.confirmPassword);
-    if (success) {
-      navigate('/dashboard');
+    try {
+      const result = await signup(formData.email, formData.password, formData.name, formData.confirmPassword);
+      if (result.success && result.user) {
+        setTimeout(() => {
+          navigate('/app/dashboard');
+        }, 100);
+      }
+    } catch (err) {
+      console.error('Signup failed:', err);
     }
   };
 

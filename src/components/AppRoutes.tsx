@@ -14,6 +14,8 @@ import { ForgotPasswordPage } from '../pages/ForgotPasswordPage';
 
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuthContext();
+  console.log(user);
+  console.log("in app routes");
   return user ? <>{children}</> : <Navigate to="/" replace />;
 };
 
