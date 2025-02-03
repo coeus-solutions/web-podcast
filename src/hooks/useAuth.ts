@@ -31,7 +31,6 @@ export const useAuth = () => {
       // Store user data
       setUser(userData);
       localStorage.setItem('user', JSON.stringify(userData));
-      console.log('returnung');
       return { success: true, user: userData };
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred during signup');
