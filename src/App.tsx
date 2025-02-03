@@ -7,7 +7,7 @@ import { ToastContainer } from './components/common/Toast';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <ThemeProvider>
         <AuthProvider>
           <div className="min-h-screen dark:bg-gray-900">

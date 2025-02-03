@@ -30,7 +30,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/signup" element={<PublicRoute><SignupPage /></PublicRoute>} />
       <Route path="/forgot-password" element={<PublicRoute><ForgotPasswordPage /></PublicRoute>} />
       <Route path="/app" element={<PrivateRoute><Layout /></PrivateRoute>}>
-        <Route index element={<Navigate to="/app/dashboard" replace />} />
+        {/* <Route index element={<Navigate to="/app/dashboard" replace />} /> */}
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="podcasts" element={<PodcastList />} />
         <Route path="settings" element={<Settings />} />
