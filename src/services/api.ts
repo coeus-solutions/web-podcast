@@ -59,6 +59,37 @@ export const auth = {
     return response.data;
   },
 
+  requestPasswordReset: async (email: string) => {
+    try {
+      const response = await api.post('/auth/forgot-password', { email });
+      return response.data;
+    } catch (error) {
+      return handleError(error as AxiosError<ApiError>);
+    }
+  },
+
+  verifyOTP: async (email: string, otp: string) => {
+    try {
+      const response = await api.post('/auth/verify-otp', { email, otp });
+      return response.data;
+    } catch (error) {
+      return handleError(error as AxiosError<ApiError>);
+    }
+  },
+
+  resetPassword: async (email: string, otp: string, new_password: string) => {
+    try {
+      const response = await api.post('/auth/reset-password', { 
+        email, 
+        otp, 
+        new_password 
+      });
+      return response.data;
+    } catch (error) {
+      return handleError(error as AxiosError<ApiError>);
+    }
+  },
+
   login: async (email: string, password: string) => {
     const formData = new FormData();
     formData.append('username', email);

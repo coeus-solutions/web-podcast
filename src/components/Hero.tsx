@@ -174,131 +174,193 @@ export const Hero: React.FC = () => {
       </div>
 
       {/* Content */}
-      <div className="relative max-w-7xl mx-auto">
-        <div className="relative z-10 pb-8 sm:pb-16 md:pb-20 lg:w-full lg:pb-28 xl:pb-32">
-          <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
-            <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="sm:text-center lg:text-left lg:col-span-7"
+      <div className="relative">
+        {/* Heading Container */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+          {/* Heading Section */}
+          <div className="text-center max-w-4xl mx-auto">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="text-4xl tracking-tight font-extrabold text-white sm:text-5xl md:text-6xl"
+            >
+              <motion.span
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                className="block bg-clip-text text-transparent bg-gradient-to-r from-emerald-300 via-teal-300 to-cyan-300"
               >
-                <motion.h1
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.3 }}
-                  className="text-4xl tracking-tight font-extrabold text-white sm:text-5xl md:text-6xl"
-                >
-                  <motion.span
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8, delay: 0.4 }}
-                    className="block bg-clip-text text-transparent bg-gradient-to-r from-emerald-300 via-teal-300 to-cyan-300"
-                  >
-                    Transform Your Videos
-                  </motion.span>
-                  <motion.span
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8, delay: 0.5 }}
-                    className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-emerald-300 to-teal-300 mt-3"
-                  >
-                    Into Engaging Content
-                  </motion.span>
-                </motion.h1>
-
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.6 }}
-                  className="mt-6 text-lg text-gray-300 sm:mt-5 sm:text-xl max-w-3xl"
-                >
-                  <SparklesIcon className="inline-block w-6 h-6 mr-2 text-emerald-400" />
-                  Harness the power of AI to automatically extract key highlights, create engaging clips, and generate smart summaries from your videos.
-                </motion.p>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.7 }}
-                  className="mt-8 sm:mt-12 flex flex-col sm:flex-row gap-4"
-                >
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="flex-1"
-                  >
-                    <Link
-                      to="/signup"
-                      className="w-full flex items-center justify-center px-8 py-4 text-base font-medium rounded-xl text-white bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 transform transition-all duration-300 shadow-lg hover:shadow-emerald-500/25 group"
-                    >
-                      Get Started Free
-                      <ArrowRightIcon className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                  </motion.div>
-
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="flex-1"
-                  >
-                    <Link
-                      to="/demo"
-                      className="w-full flex items-center justify-center px-8 py-4 text-base font-medium rounded-xl text-emerald-300 bg-emerald-900/20 hover:bg-emerald-900/30 border border-emerald-500/20 backdrop-blur-sm transition-all duration-300 group"
-                    >
-                      <PlayCircleIcon className="h-5 w-5 mr-2" />
-                      Watch Demo
-                    </Link>
-                  </motion.div>
-                </motion.div>
-
-                {/* Stats Section */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.8 }}
-                  className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4"
-                >
-                  <StatCard
-                    icon={<ChartBarIcon className="h-6 w-6 text-emerald-400" />}
-                    title="Active Users"
-                    value="10,000+"
-                  />
-                  <StatCard
-                    icon={<ClockIcon className="h-6 w-6 text-emerald-400" />}
-                    title="Hours Saved"
-                    value="500,000+"
-                  />
-                  <StatCard
-                    icon={<PlayCircleIcon className="h-6 w-6 text-emerald-400" />}
-                    title="Videos Processed"
-                    value="1M+"
-                  />
-                </motion.div>
-              </motion.div>
-
-              {/* Preview Section */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, delay: 0.9 }}
-                className="mt-12 lg:mt-0 lg:col-span-5"
+                Transform Your Videos
+              </motion.span>
+              <motion.span
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+                className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-emerald-300 to-teal-300 mt-3"
               >
-                <div className="relative backdrop-blur-xl bg-white/5 rounded-2xl border border-white/10 p-4 shadow-2xl">
-                  <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 rounded-2xl" />
-                  <div className="relative">
-                    {/* Add your preview image or video component here */}
-                    <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden bg-gray-900">
-                      <div className="flex items-center justify-center">
-                        <PlayCircleIcon className="h-20 w-20 text-emerald-400/50" />
-                      </div>
-                    </div>
+                Into Engaging Content
+              </motion.span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="mt-6 text-lg text-gray-300 sm:mt-5 sm:text-xl"
+            >
+              <SparklesIcon className="inline-block w-6 h-6 mr-2 text-emerald-400" />
+              Harness the power of AI to automatically extract key highlights, create engaging clips, and generate smart summaries from your videos.
+            </motion.p>
+          </div>
+        </div>
+
+        {/* Features Container */}
+        <div className="relative z-10 max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* How it Works section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+              className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-emerald-500/10"
+            >
+              <h3 className="text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-teal-300 mb-4">
+                How it Works
+              </h3>
+              <div className="space-y-4">
+                <div className="flex items-center space-x-4">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                    <span className="text-emerald-400 font-semibold">1</span>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-gray-300">
+                      <span className="text-emerald-400 font-semibold">Sign up in seconds</span> - No credit card required
+                    </p>
                   </div>
                 </div>
+                <div className="flex items-center space-x-4">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                    <span className="text-emerald-400 font-semibold">2</span>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-gray-300">
+                      <span className="text-emerald-400 font-semibold">Upload your video</span> - Support for all major formats
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                    <span className="text-emerald-400 font-semibold">3</span>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-gray-300">
+                      <span className="text-emerald-400 font-semibold">Let AI work its magic</span> - Get highlights & clips in minutes
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Benefits section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+              className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-emerald-500/10"
+            >
+              <h3 className="text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-teal-300 mb-4">
+                Benefits
+              </h3>
+              <div className="space-y-4">
+                <div className="flex items-center space-x-4">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                    <SparklesIcon className="h-4 w-4 text-emerald-400" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-gray-300">
+                      <span className="text-emerald-400 font-semibold">10,000 free tokens</span> on signup - No credit card required
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                    <ChartBarIcon className="h-4 w-4 text-emerald-400" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-gray-300">
+                      <span className="text-emerald-400 font-semibold">Pay-as-you-go pricing</span> - Only pay for what you use
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                    <ClockIcon className="h-4 w-4 text-emerald-400" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-gray-300">
+                      <span className="text-emerald-400 font-semibold">Instant access</span> - Start processing videos in minutes
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+
+          {/* Stats Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.9 }}
+            className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4"
+          >
+            <StatCard
+              icon={<ChartBarIcon className="h-6 w-6 text-emerald-400" />}
+              title="Active Users"
+              value="10,000+"
+            />
+            <StatCard
+              icon={<ClockIcon className="h-6 w-6 text-emerald-400" />}
+              title="Hours Saved"
+              value="500,000+"
+            />
+            <StatCard
+              icon={<PlayCircleIcon className="h-6 w-6 text-emerald-400" />}
+              title="Videos Processed"
+              value="1M+"
+            />
+          </motion.div>
+
+                    {/* Get Started section */}
+                    <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.7 }}
+            className="mt-8 max-w-md mx-auto rounded-xl p-6 flex flex-col justify-center"
+          >
+            <h3 className="text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-teal-300 mb-4 text-center">
+              Ready to Start?
+            </h3>
+            <div className="flex-1 flex items-center justify-center">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full"
+              >
+                <Link
+                  to="/signup"
+                  className="w-full flex items-center justify-center px-8 py-4 text-base font-medium rounded-xl text-white bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 transform transition-all duration-300 shadow-lg hover:shadow-emerald-500/25 group"
+                >
+                  Get Started Free
+                  <ArrowRightIcon className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </motion.div>
             </div>
-          </main>
+            <p className="text-center text-sm text-gray-300 mt-4">
+              No credit card required
+            </p>
+          </motion.div>
         </div>
       </div>
     </div>

@@ -91,7 +91,7 @@ export const UploadSection: React.FC = () => {
     try {
       await uploadPodcast(title, selectedFile);
       setUploadProgress(100);
-      toast.success('Podcast uploaded successfully!');
+      toast.success('Video uploaded successfully!');
       
       setTimeout(() => {
         setIsUploading(false);
@@ -107,7 +107,7 @@ export const UploadSection: React.FC = () => {
       if (error.response?.status === 402) {
         toast.error("You don't have sufficient tokens");
       } else {
-        toast.error('Failed to upload podcast. Please try again.');
+        toast.error('Failed to upload Video. Please try again.');
       }
     } finally {
       // Always refresh user data to get latest token balance
@@ -131,7 +131,7 @@ export const UploadSection: React.FC = () => {
       <div className="max-w-2xl mx-auto space-y-4">
         <div>
           <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Podcast Title
+            Video Title
           </label>
           <input
             type="text"
@@ -139,7 +139,7 @@ export const UploadSection: React.FC = () => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            placeholder="Enter podcast title"
+            placeholder="Enter Video title"
             required
           />
         </div>
@@ -196,7 +196,7 @@ export const UploadSection: React.FC = () => {
             disabled={loading || !selectedFile || !title.trim()}
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-400"
           >
-            {loading ? 'Uploading...' : 'Upload Podcast'}
+            {loading ? 'Uploading...' : 'Upload Video'}
           </button>
         </div>
       </div>

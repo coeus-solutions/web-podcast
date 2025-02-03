@@ -87,6 +87,7 @@ export const Settings: React.FC = () => {
                 <input
                   type="email"
                   id="email"
+                  disabled
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white h-12 px-4"
@@ -95,26 +96,6 @@ export const Settings: React.FC = () => {
             </div>
           </div>
 
-          {/* Preferences */}
-          <div>
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Preferences</h2>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Email Notifications
-                </span>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={formData.notifications}
-                    onChange={(e) => setFormData({ ...formData, notifications: e.target.checked })}
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
-                </label>
-              </div>
-            </div>
-          </div>
 
           {errorElement}
 

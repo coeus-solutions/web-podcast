@@ -10,6 +10,7 @@ import { PodcastList } from './podcasts/PodcastList';
 import { Settings } from './settings/Settings';
 import { LandingPage } from '../pages/LandingPage';
 import { PaymentSuccessPage } from '../pages/PaymentSuccessPage';
+import { ForgotPasswordPage } from '../pages/ForgotPasswordPage';
 
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuthContext();
@@ -27,6 +28,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/" element={<PublicRoute><LandingPage /></PublicRoute>} />
       <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
       <Route path="/signup" element={<PublicRoute><SignupPage /></PublicRoute>} />
+      <Route path="/forgot-password" element={<PublicRoute><ForgotPasswordPage /></PublicRoute>} />
       <Route path="/app" element={<PrivateRoute><Layout /></PrivateRoute>}>
         <Route index element={<Navigate to="/app/dashboard" replace />} />
         <Route path="dashboard" element={<DashboardPage />} />

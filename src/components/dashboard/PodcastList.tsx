@@ -25,6 +25,24 @@ export const PodcastList: React.FC = () => {
   const [playingKeyPoint, setPlayingKeyPoint] = useState<number | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
+  // Add handleDownload function
+  const handleDownload = async (url: string, filename: string) => {
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error('Download failed:', error);
+    }
+  };
+
   // Get 5 most recent podcasts
   const recentPodcasts = React.useMemo(() => {
     return [...podcasts]
@@ -183,20 +201,23 @@ export const PodcastList: React.FC = () => {
                         >
                           <div className="flex items-center justify-between">
                             <p className="text-sm text-gray-900 dark:text-white flex-1 mr-4">{keyPoint.content}</p>
-                            <div className="flex items-center gap-2">
-                              <button 
-                                className="p-2 text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/30"
+                            <div className="flex items-center gap-2 pointer-events-auto z-10">
+                              <a 
+                                href={keyPoint.file_path}
                                 onClick={(e) => {
+                                  e.preventDefault();
                                   e.stopPropagation();
-                                  handleShareOnFacebook(podcast, keyPoint);
+                                  handleDownload(keyPoint.file_path, `${podcast.title}-clip-${keyPoint.id}.mp4`);
                                 }}
-                                title="Share on Facebook"
+                                className="p-2 text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-900/30 cursor-pointer inline-flex items-center"
+                                title="Download Clip"
                               >
-                                <Share2 className="h-4 w-4" />
-                              </button>
+                                <Download className="h-4 w-4" />
+                              </a>
                               <button 
                                 className="p-2 text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 transition-colors rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/30"
                                 onClick={(e) => {
+                                  e.preventDefault();
                                   e.stopPropagation();
                                   handlePlayKeyPoint(keyPoint);
                                 }}

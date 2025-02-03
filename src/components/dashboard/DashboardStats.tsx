@@ -14,7 +14,7 @@ interface StatItem {
 }
 
 const baseStats: StatItem[] = [
-  { name: 'Total Podcasts', value: '12', icon: FileAudio },
+  { name: 'Total Videos', value: '0', icon: FileAudio },
 ];
 
 export const DashboardStats: React.FC = () => {
