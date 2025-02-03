@@ -12,11 +12,11 @@ export const useAuth = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const signup = useCallback(async (email: string, password: string) => {
+  const signup = useCallback(async (email: string, password: string, name: string, confirmPassword: string) => {
     try {
       setLoading(true);
       setError(null);
-      const newUser = await auth.signup(email, password);
+      const newUser = await auth.signup(email, password, name, confirmPassword);
       setUser(newUser);
       return newUser;
     } catch (err) {

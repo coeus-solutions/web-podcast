@@ -25,7 +25,7 @@ export const SignupPage: React.FC = () => {
       return;
     }
 
-    const success = await signup(formData);
+    const success = await signup(formData.email, formData.password, formData.name, formData.confirmPassword);
     if (success) {
       navigate('/dashboard');
     }

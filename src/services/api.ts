@@ -54,10 +54,11 @@ const handleError = (error: AxiosError<ApiError>) => {
 };
 
 export const auth = {
-  signup: async (email: string, password: string) => {
-    const response = await api.post('/auth/signup', { email, password });
+  signup: async (email: string, password: string, name: string, confirmPassword: string) => {
+    console.log('Signing up with email:', email, 'and password:', password);
+    const response = await api.post('/auth/signup', { email, password, name, confirmPassword });
     return response.data;
-  },
+  },  
 
   requestPasswordReset: async (email: string) => {
     try {
