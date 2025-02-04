@@ -12,7 +12,7 @@ export const UploadSection: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { uploadPodcast, loading, error } = usePodcasts();
+  const { uploadPodcast, loading, error, fetchPodcasts } = usePodcasts();
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isUploading, setIsUploading] = useState(false);
   const progressIntervalRef = useRef<ReturnType<typeof setInterval>>();
@@ -92,6 +92,9 @@ export const UploadSection: React.FC = () => {
       await uploadPodcast(title, selectedFile);
       setUploadProgress(100);
       toast.success('Video uploaded successfully!');
+      
+      // Refresh the podcast list after successful upload
+      await fetchPodcasts();
       
       setTimeout(() => {
         setIsUploading(false);

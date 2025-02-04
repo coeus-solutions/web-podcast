@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FileAudio, Coins, LucideIcon } from 'lucide-react';
 import { PurchaseTokenModal } from '../tokens/PurchaseTokenModal';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { usePodcasts } from '../../hooks/usePodcasts';
 
 interface StatItem {
   name: string;
@@ -13,13 +14,14 @@ interface StatItem {
   };
 }
 
-const baseStats: StatItem[] = [
-  { name: 'Total Videos', value: '0', icon: FileAudio },
-];
-
 export const DashboardStats: React.FC = () => {
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
   const { user } = useAuthContext();
+  const { podcasts, fetchPodcasts } = usePodcasts();
+
+  useEffect(() => {
+    fetchPodcasts();
+  }, [fetchPodcasts]);
 
   // Calculate available tokens with default values
   const totalTokens = user?.total_tokens ?? 0;
@@ -27,7 +29,11 @@ export const DashboardStats: React.FC = () => {
   const availableTokens = totalTokens - usedTokens;
 
   const stats: StatItem[] = [
-    ...baseStats,
+    {
+      name: 'Total Videos',
+      value: podcasts.length.toString(),
+      icon: FileAudio
+    },
     {
       name: 'Available Tokens',
       value: availableTokens.toLocaleString(),
