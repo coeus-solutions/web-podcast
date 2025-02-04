@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Play, Download, ChevronDown, ChevronUp, Square, Share2, Trash2, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { usePodcasts } from '../../hooks/usePodcasts';
+import { usePodcastContext } from '../../contexts/PodcastContext';
 import { Podcast, KeyPoint } from '../../types/api';
 
 const LoadingPodcastItem = () => (
@@ -20,10 +20,22 @@ const LoadingPodcastItem = () => (
 );
 
 export const PodcastList: React.FC = () => {
-  const { podcasts, loading, error, fetchPodcasts } = usePodcasts();
+  const { podcasts, loading, error, fetchPodcasts } = usePodcastContext();
   const [expandedPodcast, setExpandedPodcast] = useState<number | null>(null);
   const [playingKeyPoint, setPlayingKeyPoint] = useState<number | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  // Fetch podcasts only on mount
+  useEffect(() => {
+    const loadPodcasts = async () => {
+      try {
+        await fetchPodcasts();
+      } catch (err) {
+        console.error('Failed to fetch podcasts:', err);
+      }
+    };
+    loadPodcasts();
+  }, []); // Remove fetchPodcasts from dependencies
 
   // Add handleDownload function
   const handleDownload = async (url: string, filename: string) => {
@@ -49,10 +61,6 @@ export const PodcastList: React.FC = () => {
       .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
       .slice(0, 5);
   }, [podcasts]);
-
-  useEffect(() => {
-    fetchPodcasts();
-  }, [fetchPodcasts]);
 
   const handlePodcastClick = (podcastId: number) => {
     setExpandedPodcast(expandedPodcast === podcastId ? null : podcastId);

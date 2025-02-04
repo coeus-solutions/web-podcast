@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { Upload } from 'lucide-react';
-import { usePodcasts } from '../../hooks/usePodcasts';
+import { usePodcastContext } from '../../contexts/PodcastContext';
 import { podcasts } from '../../services/api';
 import { ProgressBar } from '../common/ProgressBar';
 import { useAuthContext } from '../../contexts/AuthContext';
@@ -12,7 +12,7 @@ export const UploadSection: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { uploadPodcast, loading, error, fetchPodcasts } = usePodcasts();
+  const { uploadPodcast, loading, error, fetchPodcasts } = usePodcastContext();
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isUploading, setIsUploading] = useState(false);
   const progressIntervalRef = useRef<ReturnType<typeof setInterval>>();
@@ -89,22 +89,29 @@ export const UploadSection: React.FC = () => {
     simulateProgress();
     
     try {
-      await uploadPodcast(title, selectedFile);
+      // First, complete the upload
+      const result = await uploadPodcast(title, selectedFile);
+      
+      // Then update the progress and show success message
       setUploadProgress(100);
       toast.success('Video uploaded successfully!');
       
-      // Refresh the podcast list after successful upload
-      await fetchPodcasts();
+      // Reset the form
+      setTitle('');
+      setSelectedFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
       
-      setTimeout(() => {
-        setIsUploading(false);
-        setUploadProgress(0);
-        setTitle('');
-        setSelectedFile(null);
-        if (fileInputRef.current) {
-          fileInputRef.current.value = '';
+      // Finally, fetch the updated list
+      setTimeout(async () => {
+        try {
+          await fetchPodcasts();
+        } catch (err) {
+          console.error('Failed to refresh podcast list:', err);
         }
-      }, 500);
+      }, 1000); // Add a small delay to ensure upload is fully processed
+      
     } catch (err) {
       const error = err as AxiosError;
       if (error.response?.status === 402) {
@@ -120,6 +127,7 @@ export const UploadSection: React.FC = () => {
         clearInterval(progressIntervalRef.current);
       }
       setIsUploading(false);
+      setUploadProgress(0);
     }
   };
 
