@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { FileAudio, Coins, LucideIcon } from 'lucide-react';
 import { PurchaseTokenModal } from '../tokens/PurchaseTokenModal';
 import { useAuthContext } from '../../contexts/AuthContext';
-import { usePodcastContext } from '../../contexts/PodcastContext';
 
 interface StatItem {
   name: string;
