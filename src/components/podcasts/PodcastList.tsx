@@ -11,6 +11,7 @@ interface PodcastListProps {
   showSort?: boolean;
   showDelete?: boolean;
   className?: string;
+  setTotalVideos?: (total: number) => void;
 }
 
 const LoadingPodcastCard = () => (
@@ -36,7 +37,8 @@ export const PodcastList: React.FC<PodcastListProps> = ({
   showSearch = true,
   showSort = true,
   showDelete = true,
-  className = ''
+  className = '',
+  setTotalVideos = null
 }) => {
   const [podcasts, setPodcasts] = useState<Podcast[]>([]);
   const [isFetching, setIsFetching] = useState(false);
@@ -57,6 +59,9 @@ export const PodcastList: React.FC<PodcastListProps> = ({
     try {
       const data = await podcastsApi.getAll();
       setPodcasts(data);
+      if (setTotalVideos) {
+        setTotalVideos(data.length);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred while fetching podcasts');
       console.error('Fetch error:', err);

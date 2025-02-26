@@ -14,10 +14,9 @@ interface StatItem {
   };
 }
 
-export const DashboardStats: React.FC = () => {
+export const DashboardStats: React.FC<{ totalVideos: number }> = ({ totalVideos }) => {
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
   const { user } = useAuthContext();
-  const { podcasts } = usePodcastContext();
 
   // Calculate available tokens with default values
   const totalTokens = user?.total_tokens ?? 0;
@@ -27,7 +26,7 @@ export const DashboardStats: React.FC = () => {
   const stats: StatItem[] = [
     {
       name: 'Total Videos',
-      value: podcasts.length.toString(),
+      value: totalVideos.toString(),
       icon: FileAudio
     },
     {

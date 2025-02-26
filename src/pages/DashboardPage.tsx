@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PodcastList } from '../components/podcasts/PodcastList';
 import { UploadSection } from '../components/dashboard/UploadSection';
 import { DashboardStats } from '../components/dashboard/DashboardStats';
@@ -61,6 +61,7 @@ const LoadingPodcastList = () => (
 
 export const DashboardPage: React.FC = () => {
   const { refreshUser } = useAuthContext();
+  const [totalVideos, setTotalVideos] = useState(0);
 
   useEffect(() => {
     // Fetch latest user information when dashboard loads
@@ -74,7 +75,7 @@ export const DashboardPage: React.FC = () => {
         <div className="relative">
           <div className="absolute inset-0 bg-white/80 dark:bg-gray-800/80 rounded-2xl shadow-lg border border-gray-100/20 dark:border-gray-700/20"></div>
           <div className="relative p-8">
-            <DashboardStats />
+            <DashboardStats totalVideos={totalVideos} />
           </div>
         </div>
 
@@ -97,6 +98,7 @@ export const DashboardPage: React.FC = () => {
               showSort={false}
               showDelete={false}
               className="p-0"
+              setTotalVideos={setTotalVideos}
             />
           </div>
         </div>
