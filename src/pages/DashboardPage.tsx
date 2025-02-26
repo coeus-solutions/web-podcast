@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { PodcastList } from '../components/dashboard/PodcastList';
+import { PodcastList } from '../components/podcasts/PodcastList';
 import { UploadSection } from '../components/dashboard/UploadSection';
 import { DashboardStats } from '../components/dashboard/DashboardStats';
 import { PageLayout } from '../components/layout/PageLayout';
@@ -90,7 +90,14 @@ export const DashboardPage: React.FC = () => {
         <div className="relative">
           <div className="absolute inset-0 bg-white/95 dark:bg-gray-800/95 rounded-2xl shadow-lg border border-gray-100/20 dark:border-gray-700/20"></div>
           <div className="relative p-8">
-            <PodcastList />
+            <PodcastList 
+              variant="dashboard"
+              maxItems={5}
+              showSearch={false}
+              showSort={false}
+              showDelete={false}
+              className="p-0"
+            />
           </div>
         </div>
       </div>
