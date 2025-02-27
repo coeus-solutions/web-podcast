@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import { User, LoginResponse, Podcast, ShareResponse, ApiError } from '../types/api';
+import { User, LoginResponse, Podcast, ShareResponse, ApiError, KeyPoint } from '../types/api';
 import { toast } from '../components/common/Toast';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -148,9 +148,9 @@ export const podcasts = {
     }
   },
 
-  async getAll(): Promise<Podcast[]> {
+  async getAll(signal?: AbortSignal): Promise<Podcast[]> {
     try {
-      const response = await api.get<Podcast[]>('/podcasts');
+      const response = await api.get<Podcast[]>('/podcasts', { signal });
       return response.data;
     } catch (error) {
       return handleError(error as AxiosError<ApiError>);
@@ -177,6 +177,15 @@ export const podcasts = {
   async shareKeyPointOnFacebook(keyPointId: number): Promise<ShareResponse> {
     try {
       const response = await api.get<ShareResponse>(`/podcasts/key-points/${keyPointId}/share/facebook`);
+      return response.data;
+    } catch (error) {
+      return handleError(error as AxiosError<ApiError>);
+    }
+  },
+
+  async getKeyPoints(podcastId: number): Promise<KeyPoint[]> {
+    try {
+      const response = await api.get<KeyPoint[]>(`/podcasts/${podcastId}/key-points`);
       return response.data;
     } catch (error) {
       return handleError(error as AxiosError<ApiError>);

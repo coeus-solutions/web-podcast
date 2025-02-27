@@ -2,18 +2,17 @@ import React, { createContext, useContext, useState, useCallback, ReactNode } fr
 import { podcasts } from '../services/api';
 import { Podcast } from '../types/api';
 
-interface PodcastContextType {
+export type PodcastContextType = {
   podcasts: Podcast[];
-  loading: boolean;
+  isFetching: boolean;
+  isUploading: boolean;
   error: string | null;
-  fetchPodcasts: () => Promise<Podcast[]>;
-  uploadPodcast: (title: string, file: File, onProgress?: (progress: number) => void) => Promise<Podcast>;
+  fetchPodcasts: () => Promise<void>;
+  uploadPodcast: (title: string, file: File) => Promise<void>;
   deletePodcast: (id: number) => Promise<void>;
-  getPodcast: (id: number) => Promise<Podcast>;
-  shareKeyPoint: (keyPointId: number) => Promise<any>;
-}
+};
 
-const PodcastContext = createContext<PodcastContextType | null>(null);
+const PodcastContext = createContext<PodcastContextType | undefined>(undefined);
 
 export const usePodcastContext = () => {
   const context = useContext(PodcastContext);
@@ -25,46 +24,41 @@ export const usePodcastContext = () => {
 
 export const PodcastProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [podcastList, setPodcastList] = useState<Podcast[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchPodcasts = useCallback(async () => {
     try {
-      setLoading(true);
+      setIsFetching(true);
       setError(null);
       const data = await podcasts.getAll();
       setPodcastList(data);
-      return data;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred while fetching podcasts');
       throw err;
     } finally {
-      setLoading(false);
+      setIsFetching(false);
     }
   }, []);
 
-  const uploadPodcast = useCallback(async (
-    title: string,
-    file: File,
-    onProgress?: (progress: number) => void
-  ) => {
-    setLoading(true);
-    setError(null);
+  const uploadPodcast = useCallback(async (title: string, file: File) => {
     try {
-      const newPodcast = await podcasts.upload(title, file, onProgress);
+      setIsUploading(true);
+      setError(null);
+      const newPodcast = await podcasts.upload(title, file);
       setPodcastList(prev => [newPodcast, ...prev]);
-      return newPodcast;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to upload podcast');
       throw err;
     } finally {
-      setLoading(false);
+      setIsUploading(false);
     }
   }, []);
 
   const deletePodcast = useCallback(async (id: number) => {
     try {
-      setLoading(true);
+      setIsFetching(true);
       setError(null);
       await podcasts.delete(id);
       setPodcastList(prev => prev.filter(podcast => podcast.id !== id));
@@ -72,48 +66,18 @@ export const PodcastProvider: React.FC<{ children: ReactNode }> = ({ children })
       setError(err instanceof Error ? err.message : 'An error occurred while deleting podcast');
       throw err;
     } finally {
-      setLoading(false);
+      setIsFetching(false);
     }
   }, []);
 
-  const getPodcast = useCallback(async (id: number) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const podcast = await podcasts.getById(id);
-      return podcast;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred while fetching podcast');
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const shareKeyPoint = useCallback(async (keyPointId: number) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await podcasts.shareKeyPointOnFacebook(keyPointId);
-      window.open(response.share_url, '_blank');
-      return response;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred while sharing key point');
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const value = {
+  const value: PodcastContextType = {
     podcasts: podcastList,
-    loading,
+    isFetching,
+    isUploading,
     error,
     fetchPodcasts,
     uploadPodcast,
     deletePodcast,
-    getPodcast,
-    shareKeyPoint,
   };
 
   return (

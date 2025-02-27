@@ -1,6 +1,5 @@
 import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { Upload } from 'lucide-react';
-import { usePodcastContext } from '../../contexts/PodcastContext';
 import { podcasts } from '../../services/api';
 import { ProgressBar } from '../common/ProgressBar';
 import { useAuthContext } from '../../contexts/AuthContext';
@@ -11,10 +10,10 @@ export const UploadSection: React.FC = () => {
   const [title, setTitle] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const { uploadPodcast, loading, error, fetchPodcasts } = usePodcastContext();
-  const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isUploading, setIsUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
   const progressIntervalRef = useRef<ReturnType<typeof setInterval>>();
   const { refreshUser } = useAuthContext();
 
@@ -89,10 +88,10 @@ export const UploadSection: React.FC = () => {
     simulateProgress();
     
     try {
-      // First, complete the upload
-      const result = await uploadPodcast(title, selectedFile);
+      // Upload the podcast
+      await podcasts.upload(title, selectedFile);
       
-      // Then update the progress and show success message
+      // Update progress and show success message
       setUploadProgress(100);
       toast.success('Video uploaded successfully!');
       
@@ -103,15 +102,6 @@ export const UploadSection: React.FC = () => {
         fileInputRef.current.value = '';
       }
       
-      // Finally, fetch the updated list
-      setTimeout(async () => {
-        try {
-          await fetchPodcasts();
-        } catch (err) {
-          console.error('Failed to refresh podcast list:', err);
-        }
-      }, 1000); // Add a small delay to ensure upload is fully processed
-      
     } catch (err) {
       const error = err as AxiosError;
       if (error.response?.status === 402) {
@@ -119,6 +109,7 @@ export const UploadSection: React.FC = () => {
       } else {
         toast.error('Failed to upload Video. Please try again.');
       }
+      setError(err instanceof Error ? err.message : 'Failed to upload video');
     } finally {
       // Always refresh user data to get latest token balance
       await refreshUser().catch(console.error);
@@ -204,10 +195,10 @@ export const UploadSection: React.FC = () => {
         <div className="text-center">
           <button
             type="submit"
-            disabled={loading || !selectedFile || !title.trim()}
+            disabled={isUploading || !selectedFile || !title.trim()}
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-400"
           >
-            {loading ? 'Uploading...' : 'Upload Video'}
+            {isUploading ? 'Uploading...' : 'Upload Video'}
           </button>
         </div>
       </div>

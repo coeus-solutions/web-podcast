@@ -4,12 +4,13 @@ import { Podcast } from '../types/api';
 
 export const usePodcasts = () => {
   const [podcastList, setPodcastList] = useState<Podcast[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchPodcasts = useCallback(async () => {
     try {
-      setLoading(true);
+      setIsFetching(true);
       setError(null);
       const data = await podcasts.getAll();
       setPodcastList(data);
@@ -18,7 +19,7 @@ export const usePodcasts = () => {
       setError(err instanceof Error ? err.message : 'An error occurred while fetching podcasts');
       throw err;
     } finally {
-      setLoading(false);
+      setIsFetching(false);
     }
   }, []);
 
@@ -27,7 +28,7 @@ export const usePodcasts = () => {
     file: File,
     onProgress?: (progress: number) => void
   ) => {
-    setLoading(true);
+    setIsUploading(true);
     setError(null);
     try {
       const newPodcast = await podcasts.upload(title, file, onProgress);
@@ -37,13 +38,13 @@ export const usePodcasts = () => {
       setError(err instanceof Error ? err.message : 'Failed to upload podcast');
       throw err;
     } finally {
-      setLoading(false);
+      setIsUploading(false);
     }
   }, []);
 
   const deletePodcast = useCallback(async (id: number) => {
     try {
-      setLoading(true);
+      setIsFetching(true);
       setError(null);
       await podcasts.delete(id);
       setPodcastList(prev => prev.filter(podcast => podcast.id !== id));
@@ -51,13 +52,13 @@ export const usePodcasts = () => {
       setError(err instanceof Error ? err.message : 'An error occurred while deleting podcast');
       throw err;
     } finally {
-      setLoading(false);
+      setIsFetching(false);
     }
   }, []);
 
   const getPodcast = useCallback(async (id: number) => {
     try {
-      setLoading(true);
+      setIsFetching(true);
       setError(null);
       const podcast = await podcasts.getById(id);
       return podcast;
@@ -65,13 +66,13 @@ export const usePodcasts = () => {
       setError(err instanceof Error ? err.message : 'An error occurred while fetching podcast');
       throw err;
     } finally {
-      setLoading(false);
+      setIsFetching(false);
     }
   }, []);
 
   const shareKeyPoint = useCallback(async (keyPointId: number) => {
     try {
-      setLoading(true);
+      setIsFetching(true);
       setError(null);
       const response = await podcasts.shareKeyPointOnFacebook(keyPointId);
       window.open(response.share_url, '_blank');
@@ -80,13 +81,14 @@ export const usePodcasts = () => {
       setError(err instanceof Error ? err.message : 'An error occurred while sharing key point');
       throw err;
     } finally {
-      setLoading(false);
+      setIsFetching(false);
     }
   }, []);
 
   return {
     podcasts: podcastList,
-    loading,
+    isFetching,
+    isUploading,
     error,
     fetchPodcasts,
     uploadPodcast,
