@@ -30,16 +30,20 @@ api.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
     if (error.response?.status === 401) {
-      // Clear local storage
-      localStorage.clear();
-      
-      // Show toast message
-      toast.error('Your session has expired. Please login again.');
-      
-      // Redirect to login after a short delay to ensure toast is visible
-      setTimeout(() => {
-        window.location.href = '/login';
-      }, 1500);
+      // Don't redirect or show toast if we're on the login page
+      const isLoginPage = window.location.pathname === '/login';
+      if (!isLoginPage) {
+        // Clear local storage
+        localStorage.clear();
+        
+        // Show toast message
+        toast.error('Your session has expired. Please login again.');
+        
+        // Redirect to login after a short delay to ensure toast is visible
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 1500);
+      }
     }
     return Promise.reject(error);
   }

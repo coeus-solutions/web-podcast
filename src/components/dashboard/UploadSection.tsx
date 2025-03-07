@@ -11,7 +11,6 @@ export const UploadSection: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const progressIntervalRef = useRef<ReturnType<typeof setInterval>>();
@@ -45,10 +44,10 @@ export const UploadSection: React.FC = () => {
       if (file.size <= 100 * 1024 * 1024) { // 100MB
         setSelectedFile(file);
       } else {
-        alert('File size exceeds 100MB limit');
+        toast.error('File size exceeds 100MB limit');
       }
     } else {
-      alert('Please upload a video file');
+      toast.error('Please upload a video file');
     }
     setIsDragging(false);
   }, []);
@@ -69,10 +68,10 @@ export const UploadSection: React.FC = () => {
         if (file.size <= 100 * 1024 * 1024) { // 100MB
           setSelectedFile(file);
         } else {
-          alert('File size exceeds 100MB limit');
+          toast.error('File size exceeds 100MB limit');
         }
       } else {
-        alert('Please upload a video file');
+        toast.error('Please upload a video file');
       }
     }
   }, []);
@@ -80,7 +79,7 @@ export const UploadSection: React.FC = () => {
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedFile || !title.trim()) {
-      alert('Please provide both title and file');
+      toast.error('Please provide both title and file');
       return;
     }
 
@@ -109,7 +108,6 @@ export const UploadSection: React.FC = () => {
       } else {
         toast.error('Failed to upload Video. Please try again.');
       }
-      setError(err instanceof Error ? err.message : 'Failed to upload video');
     } finally {
       // Always refresh user data to get latest token balance
       await refreshUser().catch(console.error);
@@ -187,10 +185,6 @@ export const UploadSection: React.FC = () => {
             </p>
           </div>
         </div>
-
-        {error && (
-          <div className="text-red-500 text-sm text-center">{error}</div>
-        )}
 
         <div className="text-center">
           <button

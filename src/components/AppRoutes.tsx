@@ -11,6 +11,8 @@ import { Settings } from './settings/Settings';
 import { LandingPage } from '../pages/LandingPage';
 import { PaymentSuccessPage } from '../pages/PaymentSuccessPage';
 import { ForgotPasswordPage } from '../pages/ForgotPasswordPage';
+import {TermsPage} from "../pages/TermsPage.tsx";
+import {PrivacyPage} from "../pages/PrivacyPage.tsx";
 
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuthContext();
@@ -31,6 +33,8 @@ const AppRoutes: React.FC = () => {
       <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
       <Route path="/signup" element={<PublicRoute><SignupPage /></PublicRoute>} />
       <Route path="/forgot-password" element={<PublicRoute><ForgotPasswordPage /></PublicRoute>} />
+        <Route path="/terms" element={<PublicRoute><TermsPage/> </PublicRoute>}/>
+        <Route path="/privacy" element={<PublicRoute><PrivacyPage /> </PublicRoute>}/>
       <Route path="/app" element={<PrivateRoute><Layout /></PrivateRoute>}>
         <Route index element={<Navigate to="/app/dashboard" replace />} />
         <Route path="dashboard" element={<DashboardPage />} />
