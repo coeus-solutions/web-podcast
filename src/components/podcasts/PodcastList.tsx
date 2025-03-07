@@ -38,7 +38,8 @@ export const PodcastList: React.FC<PodcastListProps> = ({
   showSort = true,
   showDelete = true,
   className = '',
-  setTotalVideos = null
+  setTotalVideos = null,
+  showUpload = true
 }) => {
   const [podcasts, setPodcasts] = useState<Podcast[]>([]);
   const [isFetching, setIsFetching] = useState(false);
@@ -252,12 +253,12 @@ export const PodcastList: React.FC<PodcastListProps> = ({
           <div className="text-gray-500 dark:text-gray-400 text-lg mb-4">
             No videos uploaded yet
           </div>
-          <Link
+          {showUpload && <Link
             to="/app/dashboard"
             className="px-6 py-2 bg-gradient-to-r from-sky-400 to-indigo-400 hover:from-sky-500 hover:to-indigo-500 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105"
           >
             Upload Your First Video
-          </Link>
+          </Link>}
         </div>
       </div>
     );

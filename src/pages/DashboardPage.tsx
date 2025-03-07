@@ -99,6 +99,7 @@ export const DashboardPage: React.FC = () => {
               showDelete={false}
               className="p-0"
               setTotalVideos={setTotalVideos}
+              showUpload={false}
             />
           </div>
         </div>

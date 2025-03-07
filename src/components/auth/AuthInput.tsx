@@ -5,7 +5,7 @@ interface AuthInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
 }
 
-export const AuthInput: React.FC<AuthInputProps> = ({ label, error, ...props }) => {
+export const AuthInput: React.FC<AuthInputProps> = ({ label, error, className = '', ...props }) => {
   return (
     <div className="space-y-1">
       <label htmlFor={props.id} className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -18,6 +18,7 @@ export const AuthInput: React.FC<AuthInputProps> = ({ label, error, ...props }) 
           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
           ${error ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}
           dark:bg-gray-800 dark:text-white
+          ${className}
         `}
       />
       {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
